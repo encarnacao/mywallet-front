@@ -27,9 +27,13 @@ export const CommonInput = styled.input`
 	&:focus {
 		outline: none;
 	}
+	&.error{
+		border: 1px solid red;
+		background-color: #ff8e8e;
+	}
 `;
 
-export const Body = styled.div`
+export const BodyForm = styled.div`
 	background-color: #8c11be;
 	width: 100vw;
 	height: 100vh;
@@ -48,6 +52,14 @@ export const Body = styled.div`
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		> p {
+			color: red;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+		.hidden{
+			display: none;
+		}
 	}
 	> a {
 		color: #fff;

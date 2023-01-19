@@ -1,4 +1,4 @@
-import { CommonButton, Body, CommonInput } from "../styles/SharedStyles";
+import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
 import { useState } from "react";
 
 function Signup() {
@@ -6,8 +6,19 @@ function Signup() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [error, setError] = useState(false);
+
+	const changeConfirm = (e) => {
+		setConfirmPassword(e.target.value)
+		if (e.target.value !== password && e.target.value !== "") {
+			setError(true);
+		} else if(e.target.value === password || e.target.value === ""){
+			setError(false);
+		}
+	};
+
 	return (
-		<Body>
+		<BodyForm>
 			<h1>MyWallet</h1>
 			<form>
 				<CommonInput
@@ -23,21 +34,24 @@ function Signup() {
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<CommonInput
+					className={error?"error":""}
 					type="password"
 					placeholder="Senha"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
-                <CommonInput
-                    type="password"
-                    placeholder="Confirme a senha"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+				<CommonInput
+					className={error?"error":""}
+					type="password"
+					placeholder="Confirme a senha"
+					value={confirmPassword}
+					onChange={changeConfirm}
+				/>
+				<p className={error?"":"hidden"}>Senhas devem ser iguais</p>
 				<CommonButton>Cadastrar</CommonButton>
 			</form>
 			<a href="/">Já tem uma conta? Entre agora!</a>
-		</Body>
+		</BodyForm>
 	);
 }
 

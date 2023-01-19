@@ -1,11 +1,11 @@
-import { CommonButton, Body, CommonInput } from "../styles/SharedStyles";
+import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
 import { useState } from "react";
 
 function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
-        <Body>
+        <BodyForm>
             <h1>MyWallet</h1>
             <form>
                 <CommonInput type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
@@ -13,7 +13,7 @@ function Login(){
                 <CommonButton>Entrar</CommonButton>
             </form>
             <a href="/cadastro">Primeira vez? Cadastre-se</a>
-        </Body>
+        </BodyForm>
     );
 }
 
