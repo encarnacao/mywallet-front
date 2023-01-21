@@ -1,5 +1,6 @@
 import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Signup() {
 	const [name, setName] = useState("");
@@ -50,7 +51,7 @@ function Signup() {
 				<p className={error?"":"hidden"}>Senhas devem ser iguais</p>
 				<CommonButton>Cadastrar</CommonButton>
 			</form>
-			<a href="/">Já tem uma conta? Entre agora!</a>
+			<Link to="/">Já tem uma conta? Entre agora!</Link>
 		</BodyForm>
 	);
 }

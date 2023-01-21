@@ -1,5 +1,6 @@
 import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Login(){
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function Login(){
                 <CommonInput type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} />
                 <CommonButton>Entrar</CommonButton>
             </form>
-            <a href="/cadastro">Primeira vez? Cadastre-se</a>
+            <Link to="/cadastro">Primeira vez? Cadastre-se</Link>
         </BodyForm>
     );
 }
