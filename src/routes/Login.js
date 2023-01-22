@@ -1,5 +1,5 @@
 import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../contexts/auth";
@@ -13,9 +13,15 @@ function Login() {
 	const { setToken } = useContext(AuthContext);
 	const navigate = useNavigate();
 
+	useEffect(() =>{
+		if(localStorage.getItem("token")){
+			navigate("/home");
+		}
+	});
+
 	async function handleSubmit(e) {
 		e.preventDefault();
-        setLoading(true);
+		setLoading(true);
 		const body = { email, password };
 		try {
 			const { data } = await axios.post("/login", body);
@@ -24,27 +30,33 @@ function Login() {
 			}
 			setToken(data.token);
 			navigate("/home");
-		} catch (e) {
-			alert(e.response.data);
-            setLoading(false);
+		} catch (error) {
+			if(!error.response){
+				alert("Não foi possível conectar ao servidor");
+			} else{
+				alert(error.response.data);
+			}
+			setLoading(false);
 		}
 	}
 
-    if(loading){
-        return <Loading />
-    }
+	if (loading) {
+		return <Loading />;
+	}
 
 	return (
 		<BodyForm>
 			<h1>MyWallet</h1>
 			<form onSubmit={handleSubmit}>
 				<CommonInput
+					data-test="email"
 					type="email"
 					placeholder="E-mail"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<CommonInput
+					data-test="password"
 					type="password"
 					placeholder="Senha"
 					value={password}
@@ -57,7 +69,9 @@ function Login() {
 					/>
 					{"Permanecer conectado"}
 				</div>
-				<CommonButton type="submit">Entrar</CommonButton>
+				<CommonButton data-test="sign-in-submit" type="submit">
+					Entrar
+				</CommonButton>
 			</form>
 			<Link to="/cadastro">Primeira vez? Cadastre-se</Link>
 		</BodyForm>

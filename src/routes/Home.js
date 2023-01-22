@@ -27,8 +27,12 @@ export default function Home() {
 				setUser(data.name);
 				setEntries(data.entries);
 				setLoading(false);
-			} catch (e) {
-				alert(e.response.data);
+			} catch (error) {
+				if(!error.response){
+					alert("Não foi possível conectar ao servidor");
+				} else{
+					alert(error.response.data);
+				}
 				navigate("/");
 			}
 		}

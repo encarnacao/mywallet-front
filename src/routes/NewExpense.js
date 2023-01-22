@@ -28,9 +28,12 @@ export default function NewExpense() {
 		try {
 			await axios.post("/entries", body, config);
 			navigate("/home");
-		} catch (e) {
-			console.log(e);
-			alert(e.response.data.error);
+		} catch (error) {
+			if(!error.response){
+				alert("Não foi possível conectar ao servidor");
+			} else{
+				alert(error.response.data.error);
+			}
 			setLoading(false);
 		}
 	}

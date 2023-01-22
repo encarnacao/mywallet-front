@@ -22,8 +22,12 @@ function Signup() {
 		try {
 			await axios.post("/sign-up", body);
 			navigate("/login");
-		} catch(e){
-			alert(e.response.data);
+		} catch(error){
+			if(!error.response){
+				alert("Não foi possível conectar ao servidor");
+			} else{
+				alert(error.response.data);
+			}
 			setLoading(false);
 		}
 	}
