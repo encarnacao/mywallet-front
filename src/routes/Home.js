@@ -1,26 +1,52 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { LogoutButton, BodyHome, WalletLog, LogList, ButtonsDiv, Button } from "../styles/HomeStyles";
-
+import Loading from "../components/Loading";
+import { AuthContext } from "../contexts/auth";
+import {
+	LogoutButton,
+	BodyHome,
+	WalletLog,
+	LogList,
+	ButtonsDiv,
+	Button,
+} from "../styles/HomeStyles";
 
 export default function Home() {
-	const [user, setUser] = useState("Fulano");
-	const [data, setData] = useState([]);
-
+	const [user, setUser] = useState("");
+	const [entries, setEntries] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
+	const { config } = useContext(AuthContext);
+
+	useEffect(() => {
+		async function getEntries() {
+			try {
+				const { data } = await axios.get("/entries", config);
+				setUser(data.name);
+				setEntries(data.entries);
+				setLoading(false);
+			} catch (e) {
+				alert(e.response.data);
+				navigate("/");
+			}
+		}
+		getEntries();
+		// eslint-disable-next-line
+	}, []);
 
 	function sumValues(array, type) {
 		const values = array
 			.filter((item) => item.type === type)
-			.map((item) => item.value.replace(",", "."));
+			.map((item) => item.value);
 		const sum = values.reduce((acc, curr) => Number(acc) + Number(curr));
 		return sum;
 	}
 
 	function calculateBalance() {
-		const income = sumValues(data, "income");
-		const expense = sumValues(data, "expense");
+		const income = sumValues(entries, "income");
+		const expense = sumValues(entries, "expense");
 		const balance = income - expense;
 		return balance;
 	}
@@ -35,22 +61,24 @@ export default function Home() {
 		}
 	}
 
-	function logout(){
+	function logout() {
 		localStorage.removeItem("token");
 		navigate("/");
 	}
-
-	const emptyData = !data.length;
+	if (loading) {
+		return <Loading />;
+	}
+	const emptyData = !entries.length;
 	return (
 		<BodyHome>
 			<div>
 				<h1>Olá, {user}</h1>
-				<LogoutButton onClick={logout}/>
+				<LogoutButton onClick={logout} />
 			</div>
 			<WalletLog empty={emptyData ? 1 : 0}>
 				{emptyData && <h2>Não há registros de entrada ou saída</h2>}
 				<LogList>
-					{data.map((item) => (
+					{entries.map((item) => (
 						<li key={item.id}>
 							<div>
 								<span className="date">{item.date}</span>
@@ -58,7 +86,7 @@ export default function Home() {
 									{item.description}
 								</span>
 							</div>
-							<span className={item.type}>{item.value}</span>
+							<span className={item.type}>{item.value.replace(".",",")}</span>
 						</li>
 					))}
 				</LogList>
@@ -76,11 +104,12 @@ export default function Home() {
 				)}
 			</WalletLog>
 			<ButtonsDiv>
-				<Button>
+				<Button onClick={()=>navigate("/nova-entrada")}>
 					<AiOutlinePlusCircle />
 					<p>Nova entrada</p>
 				</Button>
-				<Button>
+
+				<Button onClick={()=>navigate("/nova-saida")}>
 					<AiOutlineMinusCircle />
 					<p>Nova saída</p>
 				</Button>
