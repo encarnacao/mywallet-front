@@ -1,22 +1,41 @@
+import axios from "axios";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
+import { AuthContext } from "../contexts/auth";
 import { EntryBody } from "../styles/NewEntry";
 import { CommonInput, CommonButton } from "../styles/SharedStyles";
-
 export default function NewExpense() {
 	const [income, setIncome] = useState({ value: "", description: "" });
+	const [loading, setLoading] = useState(false);
+
+	const navigate = useNavigate();
+	const { config } = useContext(AuthContext);
+
 	function handleChange(e) {
 		const inputValue = e.target.value;
 		const inputName = e.target.name;
 		setIncome({ ...income, [inputName]: inputValue });
 	}
 
-	function handleSubmit(e) {
+	async function handleSubmit(e) {
 		e.preventDefault();
+		setLoading(true);
 		const date = dayjs().format("DD/MM");
 		const body = { ...income, date, type: "expense" };
-		console.log(body);
+		body.value = body.value.replace(",", ".");
+		try {
+			await axios.post("/entries", body, config);
+			navigate("/home");
+		} catch (e) {
+			console.log(e);
+			alert(e.response.data.error);
+			setLoading(false);
+		}
 	}
+
+	if (loading) return <Loading />;
 
 	return (
 		<EntryBody>
