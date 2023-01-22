@@ -13,33 +13,33 @@ function Signup() {
 	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
-	
-	async function handleSubmit(e){
+
+	async function handleSubmit(e) {
 		e.preventDefault();
-		if(error) return;
+		if (error) return;
 		setLoading(true);
 		const body = { name, email, password };
 		try {
 			await axios.post("/sign-up", body);
 			navigate("/login");
-		} catch(error){
-			if(!error.response){
+		} catch (error) {
+			if (!error.response) {
 				alert("Não foi possível conectar ao servidor");
-			} else{
+			} else {
 				alert(error.response.data);
 			}
 			setLoading(false);
 		}
 	}
-	if(loading){
-		return <Loading />
+	if (loading) {
+		return <Loading />;
 	}
-	
+
 	const changeConfirm = (e) => {
-		setConfirmPassword(e.target.value)
+		setConfirmPassword(e.target.value);
 		if (e.target.value !== password && e.target.value !== "") {
 			setError(true);
-		} else if(e.target.value === password || e.target.value === ""){
+		} else if (e.target.value === password || e.target.value === "") {
 			setError(false);
 		}
 	};
@@ -49,33 +49,39 @@ function Signup() {
 			<h1>MyWallet</h1>
 			<form onSubmit={handleSubmit}>
 				<CommonInput
+					data-test="name"
 					type="text"
 					placeholder="Nome"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 				/>
 				<CommonInput
+					data-test="email"
 					type="email"
 					placeholder="E-mail"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<CommonInput
-					className={error?"error":""}
+					data-test="password"
+					className={error ? "error" : ""}
 					type="password"
 					placeholder="Senha"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<CommonInput
-					className={error?"error":""}
+					data-test="conf-password"
+					className={error ? "error" : ""}
 					type="password"
 					placeholder="Confirme a senha"
 					value={confirmPassword}
 					onChange={changeConfirm}
 				/>
-				<p className={error?"":"hidden"}>Senhas devem ser iguais</p>
-				<CommonButton type="submit">Cadastrar</CommonButton>
+				<p className={error ? "" : "hidden"}>Senhas devem ser iguais</p>
+				<CommonButton data-test="sign-up-submit" type="submit">
+					Cadastrar
+				</CommonButton>
 			</form>
 			<Link to="/">Já tem uma conta? Entre agora!</Link>
 		</BodyForm>

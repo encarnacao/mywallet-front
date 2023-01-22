@@ -28,9 +28,9 @@ export default function Home() {
 				setEntries(data.entries);
 				setLoading(false);
 			} catch (error) {
-				if(!error.response){
+				if (!error.response) {
 					alert("Não foi possível conectar ao servidor");
-				} else{
+				} else {
 					alert(error.response.data);
 				}
 				navigate("/");
@@ -76,21 +76,29 @@ export default function Home() {
 	return (
 		<BodyHome>
 			<div>
-				<h1>Olá, {user}</h1>
-				<LogoutButton onClick={logout} />
+				<h1 data-test="user-name">Olá, {user}</h1>
+				<LogoutButton data-test="logout" onClick={logout} />
 			</div>
 			<WalletLog empty={emptyData ? 1 : 0}>
 				{emptyData && <h2>Não há registros de entrada ou saída</h2>}
 				<LogList>
 					{entries.map((item) => (
-						<li key={item.id}>
+						<li key={item._id}>
 							<div>
 								<span className="date">{item.date}</span>
-								<span className="description">
+								<span
+									data-test="registry-name"
+									className="description"
+								>
 									{item.description}
 								</span>
 							</div>
-							<span className={item.type}>{item.value.replace(".",",")}</span>
+							<span
+								data-test="registry-amount"
+								className={item.type}
+							>
+								{item.value.replace(".", ",")}
+							</span>
 						</li>
 					))}
 				</LogList>
@@ -98,6 +106,7 @@ export default function Home() {
 					<div>
 						<p className="balance">SALDO</p>
 						<p
+							data-test="total-amount"
 							className={
 								calculateBalance() < 0 ? "expense" : "income"
 							}
@@ -108,12 +117,18 @@ export default function Home() {
 				)}
 			</WalletLog>
 			<ButtonsDiv>
-				<Button onClick={()=>navigate("/nova-entrada")}>
+				<Button
+					data-test="new-income"
+					onClick={() => navigate("/nova-entrada")}
+				>
 					<AiOutlinePlusCircle />
 					<p>Nova entrada</p>
 				</Button>
 
-				<Button onClick={()=>navigate("/nova-saida")}>
+				<Button
+					data-test="new-expense"
+					onClick={() => navigate("/nova-saida")}
+				>
 					<AiOutlineMinusCircle />
 					<p>Nova saída</p>
 				</Button>

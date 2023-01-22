@@ -1,6 +1,6 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { AuthContext } from "../contexts/auth";
@@ -13,6 +13,14 @@ export default function NewIncome() {
 
 	const navigate = useNavigate();
 	const { config } = useContext(AuthContext);
+
+	useEffect(()=>{
+		if(!localStorage.getItem("token")){
+			alert("Sessão expirada. Faça login novamente.");
+			navigate("/");
+		}
+		// eslint-disable-next-line
+	},[]);
 
 	function handleChange(e) {
 		const inputValue = e.target.value;
@@ -46,6 +54,7 @@ export default function NewIncome() {
 			<h1>Nova entrada</h1>
 			<form onSubmit={handleSubmit}>
 				<CommonInput
+					data-test="registry-amount-input"
 					type="text"
 					name="value"
 					placeholder="Valor"
@@ -53,13 +62,14 @@ export default function NewIncome() {
 					onChange={handleChange}
 				/>
 				<CommonInput
+					data-test="registry-name-input"
 					type="text"
 					name="description"
 					placeholder="Descrição"
 					value={income.description}
 					onChange={handleChange}
 				/>
-				<CommonButton type="submit">Salvar entrada</CommonButton>
+				<CommonButton data-test="registry-save" type="submit">Salvar entrada</CommonButton>
 			</form>
 		</EntryBody>
 	);
