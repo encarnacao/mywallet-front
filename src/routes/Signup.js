@@ -1,6 +1,8 @@
 import { CommonButton, BodyForm, CommonInput } from "../styles/SharedStyles";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Loading from "../components/Loading";
 
 function Signup() {
 	const [name, setName] = useState("");
@@ -8,7 +10,27 @@ function Signup() {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState(false);
+	const [loading, setLoading] = useState(false);
 
+	const navigate = useNavigate();
+	
+	async function handleSubmit(e){
+		e.preventDefault();
+		if(error) return;
+		setLoading(true);
+		const body = { name, email, password };
+		try {
+			await axios.post("/sign-up", body);
+			navigate("/login");
+		} catch(e){
+			alert(e.response.data);
+			setLoading(false);
+		}
+	}
+	if(loading){
+		return <Loading />
+	}
+	
 	const changeConfirm = (e) => {
 		setConfirmPassword(e.target.value)
 		if (e.target.value !== password && e.target.value !== "") {
@@ -21,7 +43,7 @@ function Signup() {
 	return (
 		<BodyForm>
 			<h1>MyWallet</h1>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<CommonInput
 					type="text"
 					placeholder="Nome"
@@ -49,7 +71,7 @@ function Signup() {
 					onChange={changeConfirm}
 				/>
 				<p className={error?"":"hidden"}>Senhas devem ser iguais</p>
-				<CommonButton>Cadastrar</CommonButton>
+				<CommonButton type="submit">Cadastrar</CommonButton>
 			</form>
 			<Link to="/">Já tem uma conta? Entre agora!</Link>
 		</BodyForm>
