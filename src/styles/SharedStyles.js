@@ -8,15 +8,13 @@ export const CommonButton = styled.button`
 	color: #fff;
 	border: none;
 	border-radius: 5px;
-	width: 87%;
-	max-width: 400px;
+	width: 100%;
 	height: 50px;
 	margin: 10px auto;
 `;
 
 export const CommonInput = styled.input`
-	width: 87%;
-	max-width: 400px;
+	width: 100%;
 	height: 60px;
 	border-radius: 5px;
 	font-family: "Raleway", sans-serif;
@@ -42,6 +40,7 @@ export const BodyForm = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	padding: 0 25px;
 	> h1 {
 		color: #fff;
 		font-family: "Saira Stencil One", cursive;
@@ -52,6 +51,12 @@ export const BodyForm = styled.div`
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		max-width: 400px;
+		>div{
+			color: white;
+			font-size: 16px;
+			font-weight: bold;
+		}
 		> p {
 			color: red;
 			font-size: 14px;
