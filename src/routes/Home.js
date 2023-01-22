@@ -1,34 +1,15 @@
 import { useEffect, useState } from "react";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import { LogoutButton, BodyHome, WalletLog, LogList, ButtonsDiv, Button } from "../styles/HomeStyles";
 
-const MOCKDATA = [
-	{
-		id: 1,
-		date: "20/01",
-		description: "Salário",
-		value: "599,90",
-		type: "income",
-	},
-	{
-		id: 2,
-		date: "21/01",
-		description: "Almoço",
-		value: "59,90",
-		type: "expense",
-	},
-	{
-		id: 3,
-		date: "23/01",
-		description: "Compras churrasco",
-		value: "959,90",
-		type: "expense",
-	},
-];
 
 export default function Home() {
 	const [user, setUser] = useState("Fulano");
 	const [data, setData] = useState([]);
+
+	const navigate = useNavigate();
+
 	function sumValues(array, type) {
 		const values = array
 			.filter((item) => item.type === type)
@@ -54,12 +35,17 @@ export default function Home() {
 		}
 	}
 
+	function logout(){
+		localStorage.removeItem("token");
+		navigate("/");
+	}
+
 	const emptyData = !data.length;
 	return (
 		<BodyHome>
 			<div>
 				<h1>Olá, {user}</h1>
-				<LogoutButton />
+				<LogoutButton onClick={logout}/>
 			</div>
 			<WalletLog empty={emptyData ? 1 : 0}>
 				{emptyData && <h2>Não há registros de entrada ou saída</h2>}
