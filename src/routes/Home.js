@@ -44,7 +44,7 @@ export default function Home() {
 		const values = array
 			.filter((item) => item.type === type)
 			.map((item) => item.value);
-		const sum = values.reduce((acc, curr) => Number(acc) + Number(curr));
+		const sum = values.reduce((acc, curr) => Number(acc) + Number(curr),0);
 		return sum;
 	}
 
