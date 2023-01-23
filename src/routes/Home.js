@@ -69,6 +69,18 @@ export default function Home() {
 		localStorage.removeItem("token");
 		navigate("/");
 	}
+
+	async function deleteEntry(id){
+		const confirmDelete = window.confirm("Tem certeza que deseja excluir essa entrada?");
+		if(!confirmDelete) return;
+		try{
+			await axios.delete(`/entries/${id}`, config);
+			setEntries(entries.filter((item) => item._id !== id));
+		} catch(e){
+			alert(e?.response?.data);
+		}
+	}
+
 	if (loading) {
 		return <Loading />;
 	}
@@ -93,12 +105,15 @@ export default function Home() {
 									{item.description}
 								</span>
 							</div>
-							<span
-								data-test="registry-amount"
-								className={item.type}
-							>
-								{item.value.replace(".", ",")}
-							</span>
+							<div>
+								<span
+									data-test="registry-amount"
+									className={item.type}
+								>
+									{item.value.replace(".", ",")}
+								</span>
+								<span className="delete" onClick={()=>deleteEntry(item._id)}>x</span>
+							</div>
 						</li>
 					))}
 				</LogList>

@@ -65,6 +65,10 @@ export const WalletLog = styled.div`
     .balance{
         font-weight: bold;
     }
+	.delete {
+		color: #C6C6C6;
+		margin-left: 10px;
+	}
 `;
 
 export const LogList = styled.ul`
