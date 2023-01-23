@@ -70,13 +70,15 @@ export default function Home() {
 		navigate("/");
 	}
 
-	async function deleteEntry(id){
-		const confirmDelete = window.confirm("Tem certeza que deseja excluir essa entrada?");
-		if(!confirmDelete) return;
-		try{
+	async function deleteEntry(id) {
+		const confirmDelete = window.confirm(
+			"Tem certeza que deseja excluir essa entrada?"
+		);
+		if (!confirmDelete) return;
+		try {
 			await axios.delete(`/entries/${id}`, config);
 			setEntries(entries.filter((item) => item._id !== id));
-		} catch(e){
+		} catch (e) {
 			alert(e?.response?.data);
 		}
 	}
@@ -101,6 +103,15 @@ export default function Home() {
 								<span
 									data-test="registry-name"
 									className="description"
+									onClick={() => {
+										navigate(
+											`/editar-${
+												item.type === "income"
+													? "entrada"
+													: "saida"
+											}/${item._id}`
+										);
+									}}
 								>
 									{item.description}
 								</span>
@@ -112,7 +123,13 @@ export default function Home() {
 								>
 									{item.value.replace(".", ",")}
 								</span>
-								<span className="delete" onClick={()=>deleteEntry(item._id)}>x</span>
+								<span
+									data-test="registry-delete"
+									className="delete"
+									onClick={() => deleteEntry(item._id)}
+								>
+									x
+								</span>
 							</div>
 						</li>
 					))}
