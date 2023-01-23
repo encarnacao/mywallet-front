@@ -6,8 +6,9 @@ import Loading from "../components/Loading";
 import { AuthContext } from "../contexts/auth";
 import { EntryBody } from "../styles/NewEntry";
 import { CommonInput, CommonButton } from "../styles/SharedStyles";
+
 export default function NewExpense() {
-	const [income, setIncome] = useState({ value: "", description: "" });
+	const [expense, setExpense] = useState({ value: "", description: "" });
 	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
@@ -24,14 +25,14 @@ export default function NewExpense() {
 	function handleChange(e) {
 		const inputValue = e.target.value;
 		const inputName = e.target.name;
-		setIncome({ ...income, [inputName]: inputValue });
+		setExpense({ ...expense, [inputName]: inputValue });
 	}
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 		setLoading(true);
 		const date = dayjs().format("DD/MM");
-		const body = { ...income, date, type: "expense" };
+		const body = { ...expense, date, type: "expense" };
 		body.value = body.value.replace(",", ".");
 		body.value = Number(body.value).toFixed(2);
 		try {
@@ -58,7 +59,7 @@ export default function NewExpense() {
 					type="text"
 					name="value"
 					placeholder="Valor"
-					value={income.value}
+					value={expense.value}
 					onChange={handleChange}
 				/>
 				<CommonInput
@@ -66,7 +67,7 @@ export default function NewExpense() {
 					type="text"
 					name="description"
 					placeholder="Descrição"
-					value={income.description}
+					value={expense.description}
 					onChange={handleChange}
 				/>
 				<CommonButton data-test="registry-save" type="submit">
