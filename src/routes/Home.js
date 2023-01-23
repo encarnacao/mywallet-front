@@ -32,6 +32,7 @@ export default function Home() {
 					alert("Não foi possível conectar ao servidor");
 				} else {
 					alert(error.response.data);
+					localStorage.removeItem("token");
 				}
 				navigate("/");
 			}
