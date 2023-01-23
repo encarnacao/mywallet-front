@@ -11,10 +11,10 @@ export default function NewExpense() {
 	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
-	const { config } = useContext(AuthContext);
+	const { config, token } = useContext(AuthContext);
 
 	useEffect(() => {
-		if (!localStorage.getItem("token")) {
+		if (!localStorage.getItem("token") && !token) {
 			alert("Sessão expirada. Faça login novamente.");
 			navigate("/");
 		}
@@ -33,6 +33,7 @@ export default function NewExpense() {
 		const date = dayjs().format("DD/MM");
 		const body = { ...income, date, type: "expense" };
 		body.value = body.value.replace(",", ".");
+		body.value = Number(body.value).toFixed(2);
 		try {
 			await axios.post("/entries", body, config);
 			navigate("/home");
