@@ -21,7 +21,7 @@ function Signup() {
 		const body = { name, email, password };
 		try {
 			await axios.post("/sign-up", body);
-			navigate("/login");
+			navigate("/");
 		} catch (error) {
 			if (!error.response) {
 				alert("Não foi possível conectar ao servidor");
